@@ -53,4 +53,19 @@ $database = "basics";
 		echo "No records or not exists on database";
 	}
 */
+
+//prepared statement
+/*
+	$id = 1;
+	$connection = new mysqli($host, $username, $password, $database);
+	$sql = "SELECT * FROM employee WHERE id=? ORDER BY id ASC";
+	$stm = $connection->prepare($sql);
+	$stm->bind_param('i', $id);
+	$stm->execute();
+	$result = $stm->get_result();
+	while($row = $result->fetch_assoc()){
+		var_dump($row);
+	}
+*/
+
 ?>
