@@ -13,6 +13,15 @@
 	background: #999;
 	text-align:center;
 }
+.buzz {
+	color:#f00;
+	text-align:center;
+	font-weight: bold;
+	width:100px;
+	height: 17px;
+	border: 1px solid #000;
+	margin-bottom: 4px;
+}
 </style>
 <body>
 
@@ -31,7 +40,11 @@ CLEARQUEUE
 </div>
 <button class="start" style="width:45px;">Start</button> <input type="number" class="cqSpeed" value="5" style="width:49px"/> Speed </br>
 <span>Try to stop the red box inside the other box <br> using different speed.</span>
-
+<hr>
+<!-- Delay-->
+DELAY
+<div class="buzz"></div>
+<button class="btn" style="width:50px;">Press</button> <input type="number" class="del" value="6000" style="width:44px"/> Delay per seconds </br>
 
 <script>
 var a;
@@ -91,7 +104,7 @@ Lesson = {
 		var cq = $(".cq1");
 		$(".start").stop().live("click", function(e){
 			$(this).removeClass("start").addClass("stop").html("Stop");
-			cqSpeed = $(".cqSpeed").val() * 100;
+			var cqSpeed = $(".cqSpeed").val() * 100;
 			if(cqSpeed <= 0){
 				cqSpeed = 100;
 				$(".cqSpeed").val(1);
@@ -114,6 +127,52 @@ Lesson = {
 			cq.stop();
 			$(this).removeClass("stop").addClass("start").html("Start");
 		});
+	},
+	
+	buzzer : function(){
+		var buzz = $(".buzz"), btn = $(".btn");
+		btn.stop().on("click", function(e){
+			var s = $(".del").val(), m = 0, h = 0;
+			var counter = setInterval(timer,1000);
+			if(s <= 0){
+				s = 1;
+				$(".del").val(1);
+			}
+			
+			//convert seconds to minutes
+			m = Math.floor(s / 60);
+			// separate the minutes to remaining seconds
+			s = Math.floor(((s / 60) % 1) * 60);
+			
+			// convert minutes to hours
+			h = Math.floor(m /60);
+			// separate the hours to remaining minutes
+			m = Math.floor(((m / 60) % 1) * 60)
+			
+			buzz.html(Lesson.leadingZero(h) +":"+ Lesson.leadingZero(m) +":"+ Lesson.leadingZero(s));
+ 			
+			//countdown timer
+			function timer(){
+				s = s - 1;
+				if(s <= 0 && m != 0){
+					m = m - 1;
+					s = 59;
+				}
+				if(s <= 0){
+					s = 1;
+					$(".del").val(1);
+					clearInterval(counter);
+					buzz.html("BUZZ");	
+					return;
+				}
+				buzz.html(Lesson.leadingZero(h) +":"+ Lesson.leadingZero(m) +":"+ Lesson.leadingZero(s));
+			}
+		});
+		
+	},
+	
+	leadingZero : function(d){
+		return (d < 10) ? "0" + d.toString() : d.toString();
 	}
 }
 $(document).ready(function(){
@@ -124,6 +183,8 @@ $(document).ready(function(){
 	Lesson.animation("box", 4, 0, "t");
 	// ClearQueue
 	Lesson.clearqueue();
+	// DELAY
+	Lesson.buzzer();
 });
 </script>
 
