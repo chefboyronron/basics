@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Jquery Structure</title>
+	<script type="text/javascript" src="jquery/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="jquery/jquery-migrate-3.0.0.min.js"></script>
+</head>
+<style>
+.box {
+	border: 1px solid #000;
+	width: 200px;
+	height: 100px;
+	text-align: center;
+	padding-top: 90px;
+}
+.square {
+	border: 1px solid #000;
+	width: 200px;
+	height: 100px;
+	text-align: center;
+	padding-top: 90px;
+}
+</style>
+<body>
+<div class="box">
+	<span class="label-box">box</span>
+</div>
+<span>Click the box to change class</span>
+<script>
+$(document).ready(function(){
+	$(".box").click(function(e){
+		$(".box").removeClass("box").addClass("square");
+		$(".label-box").removeClass("label-box").addClass("label-square");
+		$(".label-square").text("square");
+		e.preventDefault();
+	});
+});
+</script>
+
+</body>
+</html>

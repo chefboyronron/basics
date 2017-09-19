@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Jquery Structure</title>
+	<script type="text/javascript" src="jquery/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="jquery/jquery-migrate-1.4.1.min.js"></script>
+</head>
+<style>
+.base {
+	border: 1px solid #000;
+	width: 100px;
+	height: 100px;
+	background: #999;
+	text-align:center;
+}
+</style>
+<body>
+
+<!-- Animate -->
+ANIMATE
+<div class="base">
+	<div class="box1" style="border: 1px solid #000; width:10px; height:10px; background:#f00;"></div>
+</div>
+<span>Click the red box to animate</span>
+<hr>
+<!-- ClearQueue-->
+CLEARQUEUE
+<div class="base" style="height:11px;">
+	<div class="target" style="border:1px solid #000;width:10px;height:9px; position:absolute;margin-left:40px;"></div>
+	<div class="cq1" style="border: 1px solid #000; width:10px; height:9px; background:#f00;"></div>
+</div>
+<button class="start" style="width:45px;">Start</button> <input type="number" class="cqSpeed" value="5" style="width:49px"/> Speed </br>
+<span>Try to stop the red box inside the other box <br> using different speed.</span>
+
+
+<script>
+var a;
+Lesson = {
+	animation : function(e, c, m, p){
+		$("."+e+c).live("click",function(event){
+			var bnum = c+1;
+			if(c >= 4){
+				bnum = 1;
+			}
+			if(p == "l"){
+				$(this).animate({
+					marginLeft: m+"px"
+				}, 500, function(){
+					$("."+e+c).removeClass(e+c).addClass(e+bnum);
+				});
+			}else if(p == "t"){
+				$(this).animate({
+					marginTop: m+"px"
+				}, 500, function(){
+					$("."+e+c).removeClass(e+c).addClass(e+bnum);
+				});
+			}
+			event.preventDefault();
+		});
+	},
+	
+	swing : function(cq, cqSpeed){
+		cq.animate({
+			marginLeft:"88px"
+		}, cqSpeed, function(){
+			a = "r";
+			cq.animate({
+				marginLeft:"0px"
+			}, cqSpeed, function(){
+				a = "l";
+				Lesson.swing(cq, cqSpeed);
+			});
+		});
+	},
+	
+	swingReverse : function(cq, cqSpeed){
+		cq.animate({
+			marginLeft:"0px"
+		}, cqSpeed, function(){
+			a = "l";
+			cq.animate({
+				marginLeft:"88px"
+			}, cqSpeed, function(){
+				a = "r";
+				Lesson.swingReverse(cq, cqSpeed);
+			});
+		});
+	},
+	
+	clearqueue : function(){
+		var cq = $(".cq1");
+		$(".start").stop().live("click", function(e){
+			$(this).removeClass("start").addClass("stop").html("Stop");
+			cqSpeed = $(".cqSpeed").val() * 100;
+			if(cqSpeed <= 0){
+				cqSpeed = 100;
+				$(".cqSpeed").val(1);
+			}
+			cq.animate({
+			}, cqSpeed, function(){
+				if(typeof a == "undefined"){
+					Lesson.swingReverse(cq,cqSpeed);
+				}else if(a == "r"){
+					a = "r";
+					Lesson.swingReverse(cq,cqSpeed);
+				}else{
+					a = "l";
+					Lesson.swing(cq,cqSpeed);
+				}
+			});
+		});
+		$(".stop").live("click",function(e){
+			cq.clearQueue();
+			cq.stop();
+			$(this).removeClass("stop").addClass("start").html("Start");
+		});
+	}
+}
+$(document).ready(function(){
+	// Animate
+	Lesson.animation("box", 1, 88, "l");
+	Lesson.animation("box", 2, 88, "t");
+	Lesson.animation("box", 3, 0, "l");
+	Lesson.animation("box", 4, 0, "t");
+	// ClearQueue
+	Lesson.clearqueue();
+});
+</script>
+
+</body>
+</html>

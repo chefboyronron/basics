@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Jquery Structure</title>
+	<script type="text/javascript" src="jquery/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="jquery/jquery-migrate-3.0.0.min.js"></script>
+</head>
+<body>
+<a href="#" class="alert">Click me!</a>
+<script>
+$(document).ready(function(){
+	// Your code here
+	$(".alert").click(function(e){
+		alert("Horrraaaayyy");
+		e.preventDefault();
+	});
+});
+</script>
+
+</body>
+</html>
